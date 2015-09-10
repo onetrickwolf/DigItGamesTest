@@ -1,0 +1,45 @@
+var stageW = 1024;
+var stageH = 768;
+
+function initMain() {
+	if (!$.browser.mobile || !isTablet) {
+		$('#canvasHolder').show();
+	}
+
+	initGameCanvas(stageW, stageH);
+	buildGameCanvas();
+	buildReplayButton();
+	buildMainMenuButton();
+
+	goPage('main');
+	resizeCanvas();
+}
+
+var windowW = windowH = 0;
+var scalePercent = 0;
+
+function resizeGameFunc() {
+	setTimeout(function() {
+		$('.mobileRotate').css('left', checkContentWidth($('.mobileRotate')));
+		$('.mobileRotate').css('top', checkContentHeight($('.mobileRotate')));
+
+		windowW = $(window).width();
+		windowH = $(window).height();
+
+		scalePercent = windowW / stageW;
+
+		if ((stageH * scalePercent) > windowH) {
+			scalePercent = windowH / stageH;
+		}
+
+		var gameCanvas = document.getElementById("gameCanvas");
+		gameCanvas.width = stageW * scalePercent;
+		gameCanvas.height = stageH * scalePercent;
+
+		$('#canvasHolder').css('max-width', stageW * scalePercent);
+		$('#canvasHolder').css('top',
+				(windowH / 2) - ((stageH * scalePercent) / 2));
+
+		resizeCanvas();
+	}, 100);
+}
